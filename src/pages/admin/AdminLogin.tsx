@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -37,12 +37,30 @@ const AdminLogin = () => {
         });
         navigate('/admin/dashboard');
       } catch (error: any) {
-        // If admin account doesn't exist in Firebase, we'll need to create it first
-        toast({
-          title: 'Login Failed',
-          description: 'Please ensure the admin account is set up in Firebase.',
-          variant: 'destructive',
-        });
+        // If admin account doesn't exist, create it
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+          try {
+            await createUserWithEmailAndPassword(auth, ADMIN_EMAIL, password);
+            setUserRole('admin');
+            toast({
+              title: 'Admin Account Created',
+              description: 'Welcome to QuizMaster Pro!',
+            });
+            navigate('/admin/dashboard');
+          } catch (createError: any) {
+            toast({
+              title: 'Setup Failed',
+              description: createError.message || 'Unable to create admin account.',
+              variant: 'destructive',
+            });
+          }
+        } else {
+          toast({
+            title: 'Login Failed',
+            description: error.message,
+            variant: 'destructive',
+          });
+        }
       }
     } else {
       toast({
