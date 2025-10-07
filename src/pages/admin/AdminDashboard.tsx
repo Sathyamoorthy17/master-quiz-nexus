@@ -51,10 +51,10 @@ const AdminDashboard = () => {
   ];
 
   const quickActions = [
-    { label: 'Create Quiz', icon: FileText, description: 'Add a new quiz', action: () => {} },
-    { label: 'Manage Students', icon: Users, description: 'View and manage students', action: () => {} },
-    { label: 'View Analytics', icon: BarChart3, description: 'Check performance metrics', action: () => {} },
-    { label: 'Settings', icon: Settings, description: 'Configure platform', action: () => {} },
+    { label: 'Create Quiz', icon: FileText, description: 'Add a new quiz', action: () => navigate('/admin/create-quiz') },
+    { label: 'Manage Students', icon: Users, description: 'View and manage students', action: () => navigate('/admin/manage-students') },
+    { label: 'View Analytics', icon: BarChart3, description: 'Check performance metrics', action: () => navigate('/admin/analytics') },
+    { label: 'Settings', icon: Settings, description: 'Configure platform', action: () => navigate('/admin/settings') },
   ];
 
   return (
